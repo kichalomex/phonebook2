@@ -29,7 +29,11 @@ app.get('/', (request, response) => {
     response.send('<h1>Test</h1>')
 })
 
-
+app.get('/info', (request, response) => {
+    response.send(
+        `Phonebook has info for ${data.length} people <br /> ${Date()}`
+    )
+})
 
 app.get('/api/persons', (request, response) => {
     response.json(data)
