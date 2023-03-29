@@ -8,7 +8,7 @@ app.use(morgan('tiny'))
 morgan.token('object', function(request, require){
     return `${JSON.stringify(request.body)}`
 })
-
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :object'))
 let persons = [
     {
         "id": 1,
