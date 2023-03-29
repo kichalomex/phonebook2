@@ -66,13 +66,28 @@ app.delete('/api/persons/:id', (request, response) => {
 
 app.post('/api/persons', (request, response) => {
     const body = request.body;
-    console.log(body);
+    const find = persons.find(x => x.name === body.name)
 
-    if (!body.name) {
+    if (body.name === undefined && body.number === undefined) {
         return response.status(400).json({
-            error: 'content missing'
+            error: 'name and number is missing'
         })
+    }else if (body.number === undefined){
+        return response.status(400).json({
+            error: 'number is missing'
+        })
+    }else if (body.name === undefined){
+        return response.status(400).json({
+            error: 'name is missing'
+        })
+    }else {
+        if(find !== undefined){
+            return response.status(400).json({
+                error: 'name must be unique'
+            })
+        }
     }
+
     const person = {
         id:Math.floor(Math.random() * (1000 - 1) + 1),
         name:body.name,
@@ -81,7 +96,6 @@ app.post('/api/persons', (request, response) => {
 
     persons=persons.concat(person)
     response.json(person)
-    
     console.log(persons);
 })
 
