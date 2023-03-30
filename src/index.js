@@ -1,9 +1,11 @@
 const { request, response } = require('express')
 const express = require('express')
 const morgan = require('morgan')
+const cors = require('cors')
 const app = express()
+app.use(cors())
 app.use(express.json())
-app.use(morgan('tiny'))
+//app.use(morgan('tiny'))
 
 morgan.token('object', function(request, require){
     return `${JSON.stringify(request.body)}`
@@ -106,6 +108,25 @@ app.post('/api/persons', (request, response) => {
     console.log(persons);
 })
 
+app.put('/api/persons/:id', (request, response) => {
+    const id =  Number(request.params.id)
+    const person = persons.find(x =>x.id === id)
+    const body = request.body;
+    const personUpdate = {
+        id: id,
+        name: body.name,
+        number: body.number
+    }
+    console.log(person);
+    console.log(id);
+    if (person) {
+        persons = persons.map(x => x.id !== id? x : personUpdate)
+        response.json(personUpdate)
+    }
+    else {
+        response.status(404).send();
+    }
+})
 const PORT = 3001
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
